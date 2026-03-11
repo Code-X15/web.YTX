@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YTX | Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@900&family=Plus+Jakarta+Sans:wght@400;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff0000;
+            --bg: #050505;
+            --card: #111111;
+            --text: #ffffff;
+            --glow: rgba(255, 0, 0, 0.3);
+        }
+
+        body.theme-midnight { --primary: #3b82f6; --bg: #02040a; --card: #0c0e14; --glow: rgba(59, 130, 246, 0.3); }
+        body.theme-white { --primary: #ff0000; --bg: #ffffff; --card: #f5f5f7; --text: #000000; --glow: rgba(0, 0, 0, 0.1); }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            scroll-behavior: smooth;
+        }
+
+        /* Smooth Scroll Snap Slider */
+        .slider-container {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding: 3rem 10%;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .screen-wrapper {
+            flex: 0 0 250px;
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.6s ease;
+        }
+
+        .screen-card {
+            width: 100%;
+            height: 500px;
+            border-radius: 35px;
+            overflow: hidden;
+            background: #000;
+            border: 2px solid rgba(128, 128, 128, 0.1);
+            transition: all 0.6s ease;
+            opacity: 0.4;
+            transform: scale(0.9);
+        }
+
+        .screen-card img { width: 100%; height: 100%; object-fit: contain; }
+
+        /* Active Glow on Scroll */
+        .screen-wrapper.active .screen-card {
+            opacity: 1;
+            transform: scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 0 20px 50px var(--glow);
+        }
+
+        .screen-label {
+            margin-top: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.7rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: 0.4s;
+        }
+
+        .screen-wrapper.active .screen-label { opacity: 0.6; transform: translateY(0); }
+
+        /* Feature Slide Down Animation */
+        .feature-tile {
+            background: var(--card);
+            padding: 2.5rem;
+            border-radius: 40px;
+            border: 1px solid rgba(128, 128, 128, 0.1);
+            opacity: 0;
+            transform: translateY(-50px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .feature-tile.visible { opacity: 1; transform: translateY(0); border-color: var(--primary); box-shadow: 0 10px 30px var(--glow); }
+
+        .btn-main {
+            background: var(--primary);
+            color: #fff;
+            padding: 1.25rem 3rem;
+            border-radius: 100px;
+            font-weight: 900;
+            box-shadow: 0 10px 40px var(--glow);
+            transition: 0.4s;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="theme-blood">
+
+    <div class="fixed top-8 right-8 flex gap-3 z-50">
+        <div onclick="setTheme('blood')" class="w-6 h-6 rounded-full bg-red-600 cursor-pointer"></div>
+        <div onclick="setTheme('midnight')" class="w-6 h-6 rounded-full bg-blue-600 cursor-pointer"></div>
+        <div onclick="setTheme('white')" class="w-6 h-6 rounded-full bg-slate-200 cursor-pointer border"></div>
+    </div>
+
+    <section class="min-h-screen flex flex-col items-center justify-center text-center px-6">
+        <h1 class="text-9xl font-black italic tracking-tighter mb-4" style="color: var(--primary)">YTX</h1>
+        <p class="text-xs font-black opacity-30 tracking-[10px] uppercase mb-12">Universal Media Core</p>
+        <div class="flex flex-col gap-6 w-full max-w-xs">
+            <a href="https://github.com/Code-X15/YTX/releases/download/v1.0.0/YTXv1.0.0.apk" class="btn-main">DOWNLOAD APK</a>
+            <a href="https://github.com/Code-X15/YTX" class="font-black opacity-30 hover:opacity-100 transition tracking-[5px] text-[10px]">SOURCE CODE</a>
+        </div>
+    </section>
+
+    <section class="py-20">
+        <div class="px-10 mb-6">
+            <p class="text-[10px] font-black opacity-20 tracking-widest mb-2">INTERFACE LOG</p>
+            <h2 class="text-5xl font-black italic tracking-tighter">APP PREVIEW</h2>
+        </div>
+        
+        <div id="slider" class="slider-container no-scrollbar">
+            <div class="screen-wrapper active">
+                <div class="screen-card"><img src="https://github.com/Code-X15/YTX/raw/main/server/images/download_screen.png"></div>
+                <p class="screen-label">Home Dashboard</p>
+            </div>
+            <div class="screen-wrapper">
+                <div class="screen-card"><img src="https://github.com/Code-X15/YTX/raw/main/server/images/lm.png"></div>
+                <p class="screen-label">Fetching Data</p>
+            </div>
+            <div class="screen-wrapper">
+                <div class="screen-card"><img src="https://github.com/Code-X15/YTX/raw/main/server/images/mp.png"></div>
+                <p class="screen-label">Media Info</p>
+            </div>
+            <div class="screen-wrapper">
+                <div class="screen-card"><img src="https://github.com/Code-X15/YTX/raw/main/server/images/d.png"></div>
+                <p class="screen-label">Live Progress</p>
+            </div>
+            <div class="screen-wrapper">
+                <div class="screen-card"><img src="https://github.com/Code-X15/YTX/raw/main/server/images/settings_screen.png"></div>
+                <p class="screen-label">System Settings</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="p-10 space-y-10">
+        <p class="text-[10px] font-black opacity-20 tracking-widest text-center">CORE CAPABILITIES</p>
+        
+        <div class="feature-tile" data-reveal>
+            <h3 class="text-3xl font-black mb-3" style="color: var(--primary)">LIVE WEBSOCKETS</h3>
+            <p class="opacity-60 font-bold leading-relaxed">Watch every byte drop in real-time. No lag, just pure data streaming.</p>
+        </div>
+
+        <div class="feature-tile" data-reveal>
+            <h3 class="text-3xl font-black mb-3" style="color: var(--primary)">AUTO METADATA</h3>
+            <p class="opacity-60 font-bold leading-relaxed">High-res thumbnails and ID3 tags are injected automatically into every file.</p>
+        </div>
+
+        <div class="feature-tile" data-reveal>
+            <h3 class="text-3xl font-black mb-3" style="color: var(--primary)">SMART CLEANING</h3>
+            <p class="opacity-60 font-bold leading-relaxed">Removes illegal symbols from titles so your files are always safe for Windows/Android.</p>
+        </div>
+    </section>
+
+    <footer class="py-40 text-center">
+        <p class="font-black italic opacity-20 tracking-[5px] mb-4">OVER AND OUT.</p>
+        <h2 class="text-4xl font-black italic mb-2" style="color: var(--primary)">MADE BY CODEX (TAQI)</h2>
+        <p class="text-[10px] font-black opacity-20 tracking-[10px]">ALL RIGHTS RESERVED 2026</p>
+    </footer>
+
+    <script>
+        function setTheme(t) { document.body.className = 'theme-' + t; }
+
+        // Screenshot Slider Glow Logic
+        const slider = document.getElementById('slider');
+        slider.addEventListener('scroll', () => {
+            const wrappers = document.querySelectorAll('.screen-wrapper');
+            const centerX = slider.scrollLeft + (slider.offsetWidth / 2);
+            
+            wrappers.forEach(el => {
+                const elCenter = el.offsetLeft + (el.offsetWidth / 2);
+                if (Math.abs(centerX - elCenter) < 150) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+        });
+
+        // Feature Reveal Logic
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
